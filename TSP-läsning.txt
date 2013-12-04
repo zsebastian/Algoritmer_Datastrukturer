@@ -1,0 +1,13 @@
+Travelling Salesman Algos och läsning
+
+Christofides algorithm:
+	http://en.wikipedia.org/wiki/Christofides_algorithm
+
+Nearest neighbour algorithm:
+	http://en.wikipedia.org/wiki/Nearest_neighbour_algorithm
+
+Branch and Bound:
+	http://en.wikipedia.org/wiki/Branch_and_bound
+
+TSP solutions:
+	http://en.wikipedia.org/wiki/Travelling_salesman_problem#Computing_a_solution
