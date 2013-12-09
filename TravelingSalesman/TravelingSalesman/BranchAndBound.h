@@ -10,7 +10,6 @@
 
 namespace tsp
 {
-
 	namespace algorithm
 	{
 		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>

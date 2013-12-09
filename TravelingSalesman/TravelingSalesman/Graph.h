@@ -229,6 +229,4 @@ namespace tsp
 			return get(n0, n1);
 		}
 	}
-
-
 }
