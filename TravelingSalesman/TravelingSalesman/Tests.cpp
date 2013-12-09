@@ -1,20 +1,47 @@
 #include "Tests.h"
 #include <cassert>
-#include "ArrayOfArrayRep.h"
+#include "Array2d.h"
 #include "Graph.h"
 
-void test_array_of_array_rep();
-void test_matrix_weight_symmetry();
+void test_array2d_rep();
+void test_graph_weight_symmetry();
+void test_graph_view_iterator();
 
 void tsp::tests::run()
 {
-	test_array_of_array_rep();
-	test_matrix_weight_symmetry();
+	test_array2d_rep();
+	test_graph_weight_symmetry();
+	test_graph_view_iterator();
 }
 
-void test_array_of_array_rep()
+void test_graph_view_iterator()
 {
-	tsp::ArrayOfArrayRep<int> matrix;
+	tsp::Graph<int, tsp::matrix::Array2d> graph;
+	tsp::matrix::Array2d<int> matrix;
+	matrix.set(1, 1, 1);
+	matrix.set(1, 3, 2);
+	matrix.set(4, 1, 3);
+	matrix.set(2, 3, 42);
+	matrix.set(3, 5, 42);
+
+	int what = matrix.get(1, 1);
+	graph.add_weight(1, 1, 1);
+	graph.add_weight(1, 3, 2);
+	graph.add_weight(4, 1, 3);
+	graph.add_weight(3, 2, 42);
+	graph.add_weight(3, 5, 42);
+
+	int current = 0;
+	for (auto node : graph.get_neighbours(1))
+	{
+		++current;
+		assert (graph.get_weight(node.neighbour, node.start_node) == current);
+	}
+}
+
+void test_array2d_rep()
+{
+	tsp::matrix::Array2d<int> matrix;
 	matrix.set(1, 1, 1);
 	matrix.reserve(3, 3);
 	matrix.set(3, 2, 3);
@@ -33,13 +60,16 @@ void test_array_of_array_rep()
 	assert(matrix.is_null(10, 10));
 }
 
-void test_matrix_weight_symmetry()
+void test_graph_weight_symmetry()
 {
-	tsp::Graph<int, tsp::ArrayOfArrayRep> graph;
+	tsp::Graph<int, tsp::matrix::Array2d> graph;
 	graph.add_weight(1, 2, 10);
 	graph.add_weight(1, 3, 15);
+	graph.add_weight(1, 10, 20);
 	assert(graph.get_weight(2, 1) == 10);
 	assert(graph.get_weight(1, 2) == 10);
 	assert(graph.get_weight(3, 1) == 15);
 	assert(graph.get_weight(1, 3) == 15);
+	assert(graph.get_weight(10, 1) == 20);
+	assert(graph.get_weight(1, 10) == 20);
 }

@@ -75,7 +75,9 @@ namespace tsp
 		:m_index(index)
 		,m_node(node)
 		,m_graph(graph)
-	{}
+	{
+		next();
+	}
 
 	template <class T, template <class> class WeightedMatrixRep>
 	typename Graph<T, WeightedMatrixRep>::NeighbourView::Iterator Graph<T, WeightedMatrixRep>::NeighbourView::begin()
@@ -98,20 +100,20 @@ namespace tsp
 	template <class T, template <class> class WeightedMatrixRep>
 	void Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::next()
 	{
-		if (m_index >= m_graph.size_y())
+		int size = std::max(m_graph.size_x(), m_graph.size_y());
+		if (m_index >= size)
 		{
-			m_index = m_graph.size_y();
+			m_index = size;
 			return;
 		}
 
-		++m_index;
-		while(m_graph.is_null(m_node, m_index))
+		while(m_graph.is_null(std::min(m_node, m_index), std::max(m_node, m_index)))
 		{
 			++m_index;
 
-			if (m_index >= m_graph.size_y())
+			if (m_index >= size)
 			{
-				m_index = m_graph.size_y();
+				m_index = size;
 				break;
 			}
 		}
@@ -126,6 +128,7 @@ namespace tsp
 	template <class T, template <class> class WeightedMatrixRep>
 	typename Graph<T, WeightedMatrixRep>::NeighbourView::Iterator Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::operator++()
 	{
+		++m_index;
 		next();
 		return *this;
 	}
@@ -140,7 +143,7 @@ namespace tsp
 	Graph<T, WeightedMatrixRep>::NeighbourView::NeighbourView(int node, Graph<T, WeightedMatrixRep>& graph)
 		:m_node(node)
 		,m_graph(graph)
-		,m_end(graph.size_y())
+		,m_end(std::max(graph.size_x(), graph.size_y()))
 	{}
 
 	template <class T, template <class> class WeightedMatrixRep>
@@ -152,14 +155,15 @@ namespace tsp
 	template <class T, template <class> class WeightedMatrixRep>
 	void Graph<T, WeightedMatrixRep>::add_weight(int n0, int n1, const T& weight)
 	{
-		set(n0, n1, get(n0, n1) + weight);
-		set(n1, n0, get(n1, n0) + weight);
+		int min = std::min(n0, n1);
+		int max = std::max(n0, n1);
+		set(min, max, get(min, max) + weight);
 	}
 
 	template <class T, template <class> class WeightedMatrixRep>
 	int Graph<T, WeightedMatrixRep>::get_weight(int n0, int n1) const
 	{
-		return get(n0, n1);
+		return get(std::min(n0, n1), std::max(n0, n1));
 	}
 
 }

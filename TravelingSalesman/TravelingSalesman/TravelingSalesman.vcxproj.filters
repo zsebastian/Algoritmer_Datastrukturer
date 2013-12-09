@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayOfArrayRep.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tests.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Array2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
