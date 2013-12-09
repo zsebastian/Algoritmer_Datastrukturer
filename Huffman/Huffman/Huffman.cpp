@@ -45,7 +45,7 @@ void Huffman::encode(std::string& str)
 
 	while (!treeQ.empty())
 	{
-
+	
 		Tree* lhs = treeQ.top().second;
 		treeQ.pop();
 		if (treeQ.empty())

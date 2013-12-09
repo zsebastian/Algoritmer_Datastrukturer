@@ -4,6 +4,6 @@ namespace tsp
 {
 	namespace tests
 	{
-		static void run();
+		void run();
 	}
 }

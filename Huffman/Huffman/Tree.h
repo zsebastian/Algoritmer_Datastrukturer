@@ -24,7 +24,7 @@ public:
 	void setChar(char chr) { m_Char = chr; }
 private:
 	void getEncodings(std::map<char, std::vector<bool>>& val, std::vector<bool> bitString); 
-	void printTree(std::string bitString, std::ostream& stream) const;
+	void printTree(std::string& bitString, std::ostream& stream) const;
 	std::unique_ptr<Tree> m_Left;
 	std::unique_ptr<Tree> m_Right;
 	int m_Weight;

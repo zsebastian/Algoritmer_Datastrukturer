@@ -24,7 +24,7 @@ void Tree::printTree(std::ostream& stream) const
 	printTree(bitString, stream);
 }
 
-void Tree::printTree(std::string bitString, std::ostream& stream) const
+void Tree::printTree(std::string& bitString, std::ostream& stream) const
 {
  	if (m_Char != 0)
 	{
@@ -35,12 +35,14 @@ void Tree::printTree(std::string bitString, std::ostream& stream) const
 		std::string bitStringR(bitString);
 		bitStringR.push_back('0');
 		m_Right->printTree(bitStringR, stream);
+		bitStringR.pop_back();
 	}
 	if (m_Left != nullptr)
 	{
 		std::string bitStringL(bitString);
 		bitStringL.push_back('1');
 		m_Left->printTree(bitStringL, stream);
+		bitStringL.pop_back();
 	}
 }
 

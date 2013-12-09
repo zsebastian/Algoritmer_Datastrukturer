@@ -65,7 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArrayOfArrayRep.h" />
-    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="Tests.h" />
   </ItemGroup>
   <ItemGroup>

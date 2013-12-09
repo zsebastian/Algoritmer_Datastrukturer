@@ -1,11 +1,21 @@
 #include "ArrayOfArrayRep.h"
-#include "Matrix.h"
+#include "Graph.h"
 #include "Tests.h"
-
+#include <iostream>
+#include <algorithm>
 
 int main()
 {
 	tsp::tests::run();
-	tsp::WeightedMatrix<int, tsp::ArrayOfArrayRep<int>> mat;
+	tsp::Graph<int, tsp::ArrayOfArrayRep> mat;
+	mat.add_weight(1, 0, 10);
+	mat.add_weight(3, 1, 20);
+	auto view = mat.get_neighbours(1);
 
+	for (auto node : mat.get_neighbours(1))
+	{
+		std::cout << mat.get_weight(node.start_node, node.neighbour) << std::endl;
+	}
+	std::cout << "fk you!";
+	
 }

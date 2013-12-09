@@ -6,8 +6,8 @@ std::string Auguries_of_innocence();
 int main()
 {
 	std::string poem = Auguries_of_innocence();
-	Huffman huff(poem);
-	//Huffman huff(std::string("Din mamma"));
+	Huffman huff("aaaabbbc");
+	
 	auto tree = huff.getTree();
 	tree->printTree();
 	auto comp = huff.getCompressed();

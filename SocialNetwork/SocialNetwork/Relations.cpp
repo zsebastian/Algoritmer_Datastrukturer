@@ -21,32 +21,36 @@ namespace relations
 
 	std::vector<node::ptr_t> node::list_friends()
 	{
-		std::deque<node::ptr_t> children;  
+		std::vector<node::ptr_t> current_level, next_level;
+
 		std::vector<node::ptr_t> friends; 
 		std::set<node::ptr_t> visited; 
 
-		children.push_back(shared_from_this());
+		current_level.push_back(shared_from_this());
 		bool enemy_is_friend = false;
 
-		while(!children.empty())
+		while(!current_level.empty())
 		{
-			auto child = children.front;
-			children.pop_front;
-			for(auto& enemy : child->enemies_)
+			for (auto& node : current_level)
 			{
-				if(enemy_is_friend
-					&& std::find(friends.begin(), friends.end(),
-						enemy) == friends.end())
+				for(auto& enemy : node->enemies_)
 				{
-					friends.push_back(enemy);
+					if(enemy_is_friend
+						&& std::find(friends.begin(), friends.end(),
+							enemy) == friends.end())
+					{
+						friends.push_back(enemy);
+					}
+					if(visited.count(enemy) == 0)
+					{
+						visited.insert(enemy);
+						next_level.push_back(enemy);
+					}
 				}
-				if(visited.count(enemy) == 0)
-				{
-					visited.insert(child);
-					children.push_back(enemy);
-				}
+
 			}
 			enemy_is_friend = !enemy_is_friend;
+			current_level = std::move(next_level);
 		}
 
 		return std::move(friends);
