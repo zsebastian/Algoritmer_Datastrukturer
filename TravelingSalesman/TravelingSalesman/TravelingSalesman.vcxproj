@@ -65,8 +65,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Array2d.h" />
+    <ClInclude Include="BranchAndBound.h" />
+    <ClInclude Include="Edge.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="KeyValue.h" />
+    <ClInclude Include="Path.h" />
     <ClInclude Include="Tests.h" />
   </ItemGroup>
   <ItemGroup>

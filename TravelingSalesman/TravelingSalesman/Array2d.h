@@ -9,6 +9,7 @@ namespace tsp
 		class Array2d	
 		{
 		public:
+			virtual ~Array2d() {};
 			Array2d();
 			bool is_null(int x, int y) const;
 			int size_x() const;

@@ -3,19 +3,30 @@
 #include "Tests.h"
 #include <iostream>
 #include <algorithm>
+#include "Path.h"
+#include "Edge.h"
 
 int main()
 {
 	tsp::tests::run();
-	tsp::Graph<int, tsp::matrix::Array2d, tsp::Symmetric> mat;
-	mat.add_weight(1, 0, 10);
-	mat.add_weight(3, 1, 20);
-	auto view = mat.get_neighbours(1);
+	tsp::SmallGraphi graph;
 
-	for (auto node : mat.get_neighbours(1))
+	graph.add_weight(1, 0, 10);
+	graph.add_weight(3, 1, 20);
+	auto view = graph.get_neighbours(1);
+
+	for (auto node : graph.get_neighbours(1))
 	{
-		std::cout << mat.get_weight(node.start_node, node.neighbour) << std::endl;
+		std::cout << graph.get_weight(node.start_node, node.end_node) << std::endl;
 	}
+
+	tsp::Path<int> path;
+
+	
+	path.push(tsp::Edge(0, 1), graph);
+	path.push(tsp::Edge(1, 3), graph);
+
+	std::cout << path.total_weight() << std::endl;
 	std::cout << "fk you!";
 	
 }

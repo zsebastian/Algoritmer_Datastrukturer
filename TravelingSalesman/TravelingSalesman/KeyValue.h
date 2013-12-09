@@ -9,6 +9,7 @@ namespace tsp
 		class KeyValue
 		{
 		public:
+			virtual ~KeyValue() {};
 			KeyValue();
 			bool is_null(int x, int y) const;
 			int size_x() const;

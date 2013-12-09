@@ -27,6 +27,15 @@
     <ClInclude Include="KeyValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BranchAndBound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Edge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
