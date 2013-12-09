@@ -11,10 +11,12 @@
 	Needs to be copy-able and move-able.
 	*/
 
-template <class T, class WeightedMatrixRep>
-class WeightedMatrix
+namespace tsp
 {
+	template <class T, typename class WeightedMatrixRep>
+	class WeightedMatrix
+	{
 
-	MatrixRep<T>
-};
-
+		WeightedMatrixRep m_matrix;
+	};
+}
