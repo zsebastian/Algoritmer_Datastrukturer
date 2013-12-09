@@ -21,7 +21,7 @@ void tsp::tests::run()
 
 void test_graph_view_iterator()
 {
-	tsp::Graph<int, tsp::matrix::Array2d> graph;
+	tsp::Graph<int, tsp::matrix::Array2d, tsp::Symmetric> graph;
 	tsp::matrix::Array2d<int> matrix;
 	matrix.set(1, 1, 1);
 	matrix.set(1, 3, 2);
@@ -68,8 +68,9 @@ void test_matrix_rep()
 
 void test_graph_weight_symmetry()
 {
-	tsp::Graph<int, tsp::matrix::Array2d> graph0;
-	tsp::Graph<int, tsp::matrix::KeyValue> graph1;
+	tsp::Graph<int, tsp::matrix::Array2d, tsp::Symmetric> graph0;
+	tsp::Graph<int, tsp::matrix::KeyValue, tsp::Symmetric> graph1;
+
 	graph0.add_weight(1, 2, 10);
 	graph0.add_weight(1, 3, 15);
 	graph0.add_weight(1, 10, 20);

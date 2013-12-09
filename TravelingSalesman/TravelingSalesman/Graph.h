@@ -17,16 +17,34 @@
 
 namespace tsp
 {
+	template <class T, template <class> class MatrixType>
+	class Symmetric:
+		protected MatrixType<T>
+	{
+	public:
+		void add_weight(int n0, int n1, const T& weight);
+		int get_weight(int n0, int n1) const; 
+	};
 
-	template <class T, template <class> class WeightedMatrixRep>
-	class Graph: private WeightedMatrixRep<T>
+	template <class T, template <class> class MatrixType>
+	class Asymmetric:
+		protected MatrixType<T>
+	{
+	public:
+		void add_weight(int n0, int n1, const T& weight);
+		int get_weight(int n0, int n1) const; 
+	};
+
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	class Graph: 
+		public AccessorPolicy<T, WeightedMatrixRep>
 	{
 	public: 
 		class NeighbourView
 		{
 		public: 
 			template <class T, template <class> class WeightedMatrixRep>
-			friend class Graph;
+			friend class AccessorPolicy;
 
 			class Iterator
 			{
@@ -41,7 +59,7 @@ namespace tsp
 					const int start_node;
 				};
 
-				Iterator(int index, int node, Graph<T, WeightedMatrixRep>& graph);
+				Iterator(int index, int node, typename const Graph<T, WeightedMatrixRep, AccessorPolicy>& graph);
 
 				bool operator!=(const Iterator& rhs) const;
 				Iterator operator++();
@@ -52,26 +70,27 @@ namespace tsp
 
 				int m_index;
 				int m_node; 
-				Graph<T, WeightedMatrixRep>& m_graph;
+				const Graph<T, WeightedMatrixRep, AccessorPolicy>& m_graph;
 			};
 
-			NeighbourView(int node, Graph<T, WeightedMatrixRep>& graph);
+			NeighbourView(int node, typename const Graph<T, WeightedMatrixRep, AccessorPolicy>& graph );
 			Iterator begin();
 			Iterator end();
 		private: 
 			int m_node;	
 			int m_end;
-			Graph<T, WeightedMatrixRep>& m_graph;
+			const Graph<T, WeightedMatrixRep, AccessorPolicy>& m_graph;
 		};
 
 	public:
-		NeighbourView get_neighbours(int node);
-		void add_weight(int n0, int n1, const T& weight);
-		int get_weight(int n0, int n1) const; 
+		NeighbourView get_neighbours(int node) const;
+		
 	};
 	
-	template <class T, template <class> class WeightedMatrixRep>
-	Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::Iterator(int index, int node, Graph<T, WeightedMatrixRep>& graph)
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	Graph<T, 
+		WeightedMatrixRep, 
+		AccessorPolicy>::NeighbourView::Iterator::Iterator(int index, int node, typename const Graph<T, WeightedMatrixRep, AccessorPolicy>& graph)
 		:m_index(index)
 		,m_node(node)
 		,m_graph(graph)
@@ -79,26 +98,26 @@ namespace tsp
 		next();
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	typename Graph<T, WeightedMatrixRep>::NeighbourView::Iterator Graph<T, WeightedMatrixRep>::NeighbourView::begin()
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::begin()
 	{
 		return Iterator(0, m_node, m_graph);
 	}
 	
-	template <class T, template <class> class WeightedMatrixRep>
-	typename Graph<T, WeightedMatrixRep>::NeighbourView::Iterator Graph<T, WeightedMatrixRep>::NeighbourView::end()
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::end()
 	{
 		return Iterator(m_end, m_node, m_graph);
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	bool Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::operator!=(const Iterator& rhs) const
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	bool Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator::operator!=(const Iterator& rhs) const
 	{
 		return m_index != rhs.m_index;
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	void Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::next()
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	void Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator::next()
 	{
 		int size = std::max(m_graph.size_x(), m_graph.size_y());
 		if (m_index >= size)
@@ -119,51 +138,63 @@ namespace tsp
 		}
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	int Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::starting_node() const
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	int Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator::starting_node() const
 	{
 		return m_node;
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	typename Graph<T, WeightedMatrixRep>::NeighbourView::Iterator Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::operator++()
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator::operator++()
 	{
 		++m_index;
 		next();
 		return *this;
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	typename Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::Node Graph<T, WeightedMatrixRep>::NeighbourView::Iterator::operator*() const
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator::Node Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::Iterator::operator*() const
 	{
 		return Node(m_index, m_node);
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	Graph<T, WeightedMatrixRep>::NeighbourView::NeighbourView(int node, Graph<T, WeightedMatrixRep>& graph)
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView::NeighbourView(int node, const Graph<T, WeightedMatrixRep, AccessorPolicy>& graph)
 		:m_node(node)
 		,m_graph(graph)
 		,m_end(std::max(graph.size_x(), graph.size_y()))
 	{}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	typename Graph<T, WeightedMatrixRep>::NeighbourView Graph<T, WeightedMatrixRep>::get_neighbours(int node)
+	template <class T, template <class> class WeightedMatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, WeightedMatrixRep, AccessorPolicy>::NeighbourView Graph<T, WeightedMatrixRep, AccessorPolicy>::get_neighbours(int node) const
 	{
 		return NeighbourView(node, *this);
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	void Graph<T, WeightedMatrixRep>::add_weight(int n0, int n1, const T& weight)
+	template <class T, template <class> class MatrixType>
+	void Symmetric<T, MatrixType>::add_weight(int n0, int n1, const T& weight)
 	{
 		int min = std::min(n0, n1);
 		int max = std::max(n0, n1);
 		set(min, max, get(min, max) + weight);
 	}
 
-	template <class T, template <class> class WeightedMatrixRep>
-	int Graph<T, WeightedMatrixRep>::get_weight(int n0, int n1) const
+	template <class T, template <class> class MatrixType>
+	int Symmetric<T, MatrixType>::get_weight(int n0, int n1) const
 	{
 		return get(std::min(n0, n1), std::max(n0, n1));
+	}
+
+	template <class T, template <class> class MatrixType>
+	void Asymmetric<T, MatrixType>::add_weight(int n0, int n1, const T& weight)
+	{
+		set(n0, n1, get(n0, n1) + weight);
+	}
+
+	template <class T, template <class> class MatrixType>
+	int Asymmetric<T, MatrixType>::get_weight(int n0, int n1) const
+	{
+		return get(n0, n1);
 	}
 
 }
