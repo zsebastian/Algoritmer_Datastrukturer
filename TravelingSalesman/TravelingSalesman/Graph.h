@@ -165,5 +165,4 @@ namespace tsp
 	{
 		return get(std::min(n0, n1), std::max(n0, n1));
 	}
-
 }
