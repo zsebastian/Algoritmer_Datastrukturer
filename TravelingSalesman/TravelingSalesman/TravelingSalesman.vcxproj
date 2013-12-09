@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClInclude Include="Array2d.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="KeyValue.h" />
     <ClInclude Include="Tests.h" />
   </ItemGroup>
   <ItemGroup>

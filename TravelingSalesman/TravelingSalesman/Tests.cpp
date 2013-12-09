@@ -2,14 +2,19 @@
 #include <cassert>
 #include "Array2d.h"
 #include "Graph.h"
+#include "KeyValue.h"
 
-void test_array2d_rep();
+template <class rep>
+void test_matrix_rep();
+
 void test_graph_weight_symmetry();
 void test_graph_view_iterator();
 
 void tsp::tests::run()
 {
-	test_array2d_rep();
+	test_matrix_rep<tsp::matrix::Array2d<int>>();
+	test_matrix_rep<tsp::matrix::KeyValue<int>>();
+
 	test_graph_weight_symmetry();
 	test_graph_view_iterator();
 }
@@ -39,9 +44,10 @@ void test_graph_view_iterator()
 	}
 }
 
-void test_array2d_rep()
+template <class rep>
+void test_matrix_rep()
 {
-	tsp::matrix::Array2d<int> matrix;
+	rep matrix;
 	matrix.set(1, 1, 1);
 	matrix.reserve(3, 3);
 	matrix.set(3, 2, 3);
@@ -62,14 +68,25 @@ void test_array2d_rep()
 
 void test_graph_weight_symmetry()
 {
-	tsp::Graph<int, tsp::matrix::Array2d> graph;
-	graph.add_weight(1, 2, 10);
-	graph.add_weight(1, 3, 15);
-	graph.add_weight(1, 10, 20);
-	assert(graph.get_weight(2, 1) == 10);
-	assert(graph.get_weight(1, 2) == 10);
-	assert(graph.get_weight(3, 1) == 15);
-	assert(graph.get_weight(1, 3) == 15);
-	assert(graph.get_weight(10, 1) == 20);
-	assert(graph.get_weight(1, 10) == 20);
+	tsp::Graph<int, tsp::matrix::Array2d> graph0;
+	tsp::Graph<int, tsp::matrix::KeyValue> graph1;
+	graph0.add_weight(1, 2, 10);
+	graph0.add_weight(1, 3, 15);
+	graph0.add_weight(1, 10, 20);
+	assert(graph0.get_weight(2, 1) == 10);
+	assert(graph0.get_weight(1, 2) == 10);
+	assert(graph0.get_weight(3, 1) == 15);
+	assert(graph0.get_weight(1, 3) == 15);
+	assert(graph0.get_weight(10, 1) == 20);
+	assert(graph0.get_weight(1, 10) == 20);
+
+	graph1.add_weight(1, 2, 10);
+	graph1.add_weight(1, 3, 15);
+	graph1.add_weight(1, 10, 20);
+	assert(graph1.get_weight(2, 1) == 10);
+	assert(graph1.get_weight(1, 2) == 10);
+	assert(graph1.get_weight(3, 1) == 15);
+	assert(graph1.get_weight(1, 3) == 15);
+	assert(graph1.get_weight(10, 1) == 20);
+	assert(graph1.get_weight(1, 10) == 20);
 }

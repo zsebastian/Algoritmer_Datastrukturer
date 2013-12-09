@@ -30,6 +30,7 @@ namespace tsp
 			:m_size_x(0)
 			,m_size_y(0)
 		{}
+
 		template<class T>
 		bool Array2d<T>::is_null(int x, int y) const
 		{
@@ -54,6 +55,7 @@ namespace tsp
 		template <class T>
 		int Array2d<T>::get_index(int x, int y) const
 		{
+
 			return m_size_x * y + x;
 		}
 
