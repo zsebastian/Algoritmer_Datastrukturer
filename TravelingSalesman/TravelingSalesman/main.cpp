@@ -20,6 +20,11 @@ int main()
 		std::cout << graph.get_weight(node.start_node, node.end_node) << std::endl;
 	}
 
+	for (auto node : graph.get_nodes())
+	{
+		std::cout << node << std::endl;
+	}
+
 	tsp::Path<int> path;
 
 	
