@@ -323,10 +323,11 @@ namespace tsp
 			for(begin1 = begin0 + 1;begin1 != end;++begin1)
 			{
 				add_weight(std::distance(begin0, end), std::distance(begin1, end), region.distance(*begin0, *begin1));
+				if (!is_symmetric())
+					add_weight(std::distance(begin1, end), std::distance(begin0, end), region.distance(*begin0, *begin1));
 			}
 		}
 	}
-
 
 	namespace accessor
 	{
@@ -336,6 +337,7 @@ namespace tsp
 		{
 		public:
 			virtual ~Symmetric() {};
+			bool is_symmetric() {return true;};
 			void add_weight(int n0, int n1, const T& weight);
 			int get_weight(int n0, int n1) const; 
 		};
@@ -345,6 +347,7 @@ namespace tsp
 			protected MatrixType<T>
 		{
 		public:
+			bool is_symmetric() {return false;};
 			virtual ~Asymmetric() {};
 			void add_weight(int n0, int n1, const T& weight);
 			int get_weight(int n0, int n1) const; 

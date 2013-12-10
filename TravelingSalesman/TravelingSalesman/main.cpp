@@ -1,4 +1,6 @@
 #include "Array2d.h"
+#include "KeyValue.h"
+
 #include "Graph.h"
 #include "Tests.h"
 #include <iostream>
@@ -12,7 +14,7 @@ int main()
 {
 	
 	tsp::tests::run();
-	tsp::Region<int> region;
+	tsp::Region<float> region;
 	
 	region.add_city(0, 60);
 	region.add_city(32, 27);
@@ -22,15 +24,8 @@ int main()
 	region.add_city(15, 65);
 	region.add_city(95, 80);
 	
-	tsp::SmallGraphi graph(region);
+	tsp::Graph<float, tsp::matrix::KeyValue, tsp::accessor::Symmetric> graph(region);
 
-<<<<<<< HEAD
-=======
-	graph.add_weight(1, 0, 10);
-	graph.add_weight(3, 1, 20);
-
-
->>>>>>> dd1890bb27ce4e1102bdfadecb37258121bdd3a5
 	auto view = graph.get_neighbours(1);
 
 	for (auto node : graph.get_neighbours(1))

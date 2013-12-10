@@ -88,7 +88,6 @@ namespace tsp
 	{
 		return m_path.end();
 	}
-<<<<<<< HEAD
 
 	template <class T>
 	typename std::vector<std::pair<Edge, T>>::const_iterator Path<T>::begin() const
@@ -96,6 +95,4 @@ namespace tsp
 		return m_path.begin();
 	}
 
-=======
->>>>>>> dd1890bb27ce4e1102bdfadecb37258121bdd3a5
 }
