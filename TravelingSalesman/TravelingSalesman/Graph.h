@@ -2,6 +2,8 @@
 #include <utility>
 #include <memory>
 #include "Edge.h"
+#include "Region.h"
+
 /*	MatrixRep concept:
 		Must have a virtual destructor!
 		Require these:
@@ -111,17 +113,22 @@ namespace tsp
 		};
 
 	public:
+		Graph() {};
+
+		Graph(const Region<T>& region);
+
 		NeighbourView get_neighbours(int node) const;
 		NodeView get_nodes() const;
 
 		using AccessorPolicy<T, MatrixRep>::add_weight;
 		using AccessorPolicy<T, MatrixRep>::get_weight;
 		T get_weight(Edge edge) const;
+		typedef T type;
 	};
 	/*	
 	NODEVIEW
 	*/
-			template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
 		Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::Iterator(int node, typename const Graph<T, MatrixRep, AccessorPolicy>& graph)
 			:m_node(node)
 			,m_graph(graph)
@@ -274,7 +281,7 @@ namespace tsp
 	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
 	typename Edge Graph<T, MatrixRep, AccessorPolicy>::NeighbourView::Iterator::operator*() const
 	{
-		return Edge(m_index, m_node);
+		return Edge(m_node, m_index);
 	}
 
 	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
@@ -300,6 +307,26 @@ namespace tsp
 	{
 		return get_weight(edge.start_node, edge.end_node);
 	}
+
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	Graph<T, MatrixRep, AccessorPolicy>::Graph(const Region<T>& region)
+	{
+		auto begin0 = region.begin();
+		auto begin1 = region.begin();
+		auto end = region.end();
+		
+		if (begin0 == end)
+			return;
+
+		for(;begin0 + 1 != end;++begin0)
+		{
+			for(begin1 = begin0 + 1;begin1 != end;++begin1)
+			{
+				add_weight(std::distance(begin0, end), std::distance(begin1, end), region.distance(*begin0, *begin1));
+			}
+		}
+	}
+
 
 	namespace accessor
 	{

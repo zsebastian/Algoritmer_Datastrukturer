@@ -71,6 +71,7 @@
     <ClInclude Include="KeyValue.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="NearestNeighbour.h" />
+    <ClInclude Include="Region.h" />
     <ClInclude Include="Tests.h" />
   </ItemGroup>
   <ItemGroup>
