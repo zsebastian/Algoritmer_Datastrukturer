@@ -30,7 +30,7 @@ namespace tsp
 	bool Path<T>::push(Edge edge, const Graph<T, MatrixRep, AccessorPolicy>& from_graph)
 	{
 		if (m_path.size() != 0) 
-			if  (m_path[m_path.size() -1].first.end_node != edge.start_node)
+			if (m_path[m_path.size() -1].first.end_node != edge.start_node)
 				return false;
 		
 
@@ -64,5 +64,4 @@ namespace tsp
 	{
 		return m_path.end();
 	}
-
 }
