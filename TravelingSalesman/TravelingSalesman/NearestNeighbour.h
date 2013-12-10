@@ -1,32 +1,50 @@
 #pragma once
 #include "Graph.h"
+#include "Path.h"
 #include <vector>
 #include <numeric>
+
+/*
+	1. pick a starting node at random
+	2. pick the neighbour with the lowest traveling cost
+	3. go to that node
+	4. mark as visited
+	4. repeat step 2 and 3
+
+	function NearestNeighbour(Graph)
+		vector<int> unvisited(number of cities);
+		int current_node
+		int next_node
+		int lowest_travelling_cost = INT_MAX
+
+		while(vector != empty)
+			for each neighbour to current_node in vector
+				if(neighbour < lowest_travelling_cost)
+					next_node = neighbour
+					lowest_travelling_cost = neighbour.cost
+				end
+			end
+			current_node = next_node
+			unvisited.pop(next_node)
+		end
+	end 
+*/
 
 namespace tsp
 {
 	namespace algorithm
 	{
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy> 
-		void NearestNeighbour(int start_node, int end_node, const Graph<T, MatrixRep, AccessorPolicy>& graph)
+		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+		void NearestNeighbour(const Graph<T, MatrixRep, AccessorPolicy>& graph)
 		{
-			int lowest_weight_found = std::numeric_limits<T>::max();
-			int next_node;  
-			int current_node = start_node; 
-			std::vector<int> visited; 
+			std::vector<int> unvisited;
+			int current_node; 
+			int next_node; 
+			int min_weight;
 
-			while(start_node != end_node)
+			while(!unvisited.empty())
 			{
-				for(auto node : graph.get_neighbours(current_node))
-				{
-					if(graph.get_weight(node.start_node, node.neighbour) < lowest_weight_found)
-					{
-						lowest_weight_found = graph.get_weight(node.start_node, node.neighbour);
-						next_node = node; 
-					}
-				}
-				current_node = next_node; 
-				visited.push_back(current_node);
+				
 			}
 		}
 	}
