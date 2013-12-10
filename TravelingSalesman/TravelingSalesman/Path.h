@@ -36,7 +36,7 @@ namespace tsp
 	bool Path<T>::push(Edge edge, const Graph<T, MatrixRep, AccessorPolicy>& from_graph)
 	{
 		if (m_path.size() != 0) 
-			if  (m_path[m_path.size() -1].first.end_node != edge.start_node)
+			if (m_path[m_path.size() -1].first.end_node != edge.start_node)
 				return false;
 		
 
@@ -88,6 +88,7 @@ namespace tsp
 	{
 		return m_path.end();
 	}
+<<<<<<< HEAD
 
 	template <class T>
 	typename std::vector<std::pair<Edge, T>>::const_iterator Path<T>::begin() const
@@ -95,4 +96,6 @@ namespace tsp
 		return m_path.begin();
 	}
 
+=======
+>>>>>>> dd1890bb27ce4e1102bdfadecb37258121bdd3a5
 }
