@@ -9,6 +9,7 @@
 #include "Edge.h"
 #include "BranchAndBound.h"
 #include "Region.h"
+#include "NearestNeighbour.h"
 
 int main()
 {
@@ -23,7 +24,14 @@ int main()
 	region.add_city(43, 18);
 	region.add_city(15, 65);
 	region.add_city(95, 80);
-	
+	region.add_city(5, 40);
+	region.add_city(64, 20);
+	region.add_city(95, 46);
+	region.add_city(46, 85);
+	region.add_city(23, 64);
+	region.add_city(76, 6);
+	region.add_city(15, 97);
+
 	tsp::Graph<float, tsp::matrix::KeyValue, tsp::accessor::Symmetric> graph(region);
 
 	auto view = graph.get_neighbours(1);
@@ -38,8 +46,10 @@ int main()
 		std::cout << node << std::endl;
 	}
 
-	auto path = tsp::algorithm::BranchAndBound(graph);
-	for (auto edge : path)
+	auto path0 = tsp::algorithm::BranchAndBound(graph);
+	auto path1 = tsp::algorithm::NearestNeighbour(graph);
+
+	for (auto edge : path0)
 	{
 		std::cout << edge.first.start_node << " -> " << edge.first.end_node << " (" << edge.second << ")" << std::endl;
 	}
