@@ -43,13 +43,13 @@ namespace tsp
 		{
 			m_size_x = std::max(m_size_x, x + 1);
 			m_size_y = std::max(m_size_y, y + 1);
-			m_map[std::make_pair(std::max(x, y), std::min(x, y))] = std::move(weight);
+			m_map[std::make_pair(x, y)] = std::move(weight);
 		}
 
 		template <class T>
 		const T& KeyValue<T>::get(int x, int y) const
 		{
-			auto find = m_map.find(std::make_pair(std::max(x, y), std::min(x, y)));
+			auto find = m_map.find(std::make_pair(x, y));
 			if (find != m_map.end())
 				return find->second;
 			else
@@ -60,7 +60,7 @@ namespace tsp
 		bool KeyValue<T>::is_null(int x, int y) const
 		{
 			if (x < m_size_x && y < m_size_y)
-				return m_map.count(std::make_pair(std::max(x, y), std::min(x, y))) == 0;
+				return m_map.count(std::make_pair(x, y)) == 0;
 			else
 				return true;
 		}

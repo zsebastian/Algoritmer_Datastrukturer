@@ -17,11 +17,11 @@ public:
 	const Tree* const getTree() const;
 
 	/* return the compressed bytes of the text */
-	const std::vector<bool>& getCompressed() const;
+	/*const std::vector<bool>& getCompressed() const;
 
 	std::string deCompress();
 	std::string serialize();
-	void deserialize(std::string&);
+	void deserialize(std::string&);*/
 
 private:
 	void encode(std::string&);
