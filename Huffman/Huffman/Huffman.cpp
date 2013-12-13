@@ -1,6 +1,6 @@
 #include "Huffman.h"
 #include <queue>
-#include <map>
+#include <array>
 
 Huffman::Huffman(std::string str)
 {
@@ -20,7 +20,8 @@ const std::vector<bool>& Huffman::getCompressed() const
 */
 void Huffman::encode(std::string& str)
 {
-	std::map<char, int> charCount;
+	std::array<int, 256U> charCount;
+	std::fill(charCount.begin(), charCount.end(), 0);
 	m_Tree.reset();
 
 	struct priocomp
@@ -38,9 +39,11 @@ void Huffman::encode(std::string& str)
 		charCount[chr]++;
 	}
 
-	for (auto chr: charCount)
+	for (auto count = charCount.begin(); count != charCount.end(); ++count)
 	{
-		treeQ.emplace(chr.second, new Tree(chr.second, chr.first));
+		char chr = std::distance(charCount.begin(), count);
+		if (*count != 0)
+			treeQ.emplace(*count, new Tree(*count, chr));
 	}
 
 	while (!treeQ.empty())

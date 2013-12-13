@@ -1,12 +1,12 @@
 #include "Huffman.h"
 #include <iostream>
-#
+
 std::string Auguries_of_innocence();
 
 int main()
 {
 	std::string poem = Auguries_of_innocence();
-	Huffman huff("aaaabbbc");
+	Huffman huff(poem);
 	
 	auto tree = huff.getTree();
 	tree->printTree();
