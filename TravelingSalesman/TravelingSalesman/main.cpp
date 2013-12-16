@@ -17,24 +17,20 @@ int main()
 {
 	
 	tsp::tests::run();
-	tsp::Region<int> region;
+	tsp::Region<float> region;
 	
-	region.add_city(47, 55);
-	region.add_city(15, 65);
+	region.add_city(15, 30);	
 	region.add_city(43, 18);
 	region.add_city(95, 80);
-	region.add_city(5, 40);
-	region.add_city(64, 20);
-	region.add_city(95, 46);
-	region.add_city(46, 85);
-	region.add_city(23, 64);
-	region.add_city(76, 6);
-	region.add_city(15, 97);
+	region.add_city(15, 65);
 	region.add_city(0, 60);
+	region.add_city(47, 55);
+	region.add_city(32, 27);
+	
 	/*region.add_city(32, 27);
 	region.add_city(15, 30);*/
 	
-	tsp::SmallGraphi graph(region);
+	tsp::Graph<float, tsp::matrix::KeyValue, tsp::accessor::Symmetric> graph(region);
 	
 	auto now = std::chrono::system_clock::now();
 	std::cout << "Doing Nearest Neighbour:" << std::endl;

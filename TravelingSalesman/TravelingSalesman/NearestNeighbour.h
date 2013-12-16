@@ -45,12 +45,10 @@ namespace tsp
 				auto node_view = graph.get_nodes();
 			
 				std::set<int> unvisited;
-				int start_node = -1;
+				int start_node = index;
 
 				for (auto node : node_view)
 				{
-					if (node == index)
-						start_node = node;
 					unvisited.insert(node);
 				}
 			
@@ -72,9 +70,10 @@ namespace tsp
 						{
 							continue;
 						}					
-						if(graph.get_weight(start_node, node.end_node) < min_weight)
+						T w = graph.get_weight(current_node, node.end_node);
+						if(graph.get_weight(current_node, node.end_node) < min_weight)
 						{
-							min_weight = graph.get_weight(start_node, node.end_node);
+							min_weight = graph.get_weight(current_node, node.end_node);
 							next_node = node.end_node;
 						}
 					}

@@ -22,7 +22,7 @@ namespace tsp
 		std::pair<Edge, T>& back();
 
 		int total_edges() const;
-		int total_weight() const;
+		T total_weight() const;
 
 		typename std::vector<std::pair<Edge, T>>::const_iterator begin() const;
 		typename std::vector<std::pair<Edge, T>>::const_iterator end() const;
@@ -51,9 +51,9 @@ namespace tsp
 	}
 
 	template <class T>
-	int Path<T>::total_weight() const
+	T Path<T>::total_weight() const
 	{
-		return std::accumulate(m_path.begin(), m_path.end(), 0, [&](T val, std::pair<Edge, T> e)
+		return std::accumulate(m_path.begin(), m_path.end(), 0.f, [&](T val, std::pair<Edge, T> e)
 			{
 				return val + e.second;
 			});

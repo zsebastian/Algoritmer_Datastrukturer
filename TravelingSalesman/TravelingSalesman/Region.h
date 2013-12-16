@@ -40,8 +40,9 @@ namespace tsp
 	template <class T>
 	T Region<T>::distance(std::pair<T, T> c0, std::pair<T, T> c1) const
 	{
-		int x = c0.first - c1.first;
-		int y = c0.second - c1.second;
+		T x = c0.first - c1.first;
+		T y = c0.second - c1.second;
+		T ret = std::sqrt(x * x + y * y);
 		return std::sqrt(x * x + y * y);
 	}
 
