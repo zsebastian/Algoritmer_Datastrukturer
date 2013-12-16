@@ -37,9 +37,7 @@ namespace relations
 				{
 					if (visited.count(enemy) == 0)
 					{
-						if(enemy_is_friend
-							&& std::find(friends.begin(), friends.end(),
-								enemy) == friends.end())
+						if(enemy_is_friend)
 						{
 							friends.push_back(enemy);
 						}
