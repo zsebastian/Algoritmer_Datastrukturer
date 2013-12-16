@@ -1,0 +1,24 @@
+Att göra - Algoritmer & Datastrukturer
+
+Pseudokod:
+	- Handelsresandeproblemet, fixa
+	
+Tidskomplexitet: 
+	- Handelsresandeproblemet
+
+Analys
+	- Handelsresandeproblemet
+	
+
+Kod i rapport
+	- Handelsresandeproblemet
+
+	
+Uppgift kvar
+	- en enklare lösning av handelsresandeproblemet
+
+
+
+
+LISTA FRÅGOR:
+	Hur analysera tidskomplexitet. Sociala nätverk 

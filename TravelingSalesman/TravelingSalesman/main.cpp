@@ -10,43 +10,60 @@
 #include "BranchAndBound.h"
 #include "NearestNeighbour.h"
 #include "Region.h"
+#include "NearestNeighbour.h"
+#include <chrono>
 
 int main()
 {
 	
 	tsp::tests::run();
-	tsp::Region<float> region;
+	tsp::Region<int> region;
 	
 	region.add_city(47, 55);
 	region.add_city(15, 65);
 	region.add_city(43, 18);
 	region.add_city(95, 80);
+	region.add_city(5, 40);
+	region.add_city(64, 20);
+	region.add_city(95, 46);
+	region.add_city(46, 85);
+	region.add_city(23, 64);
+	region.add_city(76, 6);
+	region.add_city(15, 97);
 	region.add_city(0, 60);
-	region.add_city(32, 27);
-	region.add_city(15, 30);
+	/*region.add_city(32, 27);
+	region.add_city(15, 30);*/
 	
+	tsp::SmallGraphi graph(region);
 	
-	tsp::Graph<float, tsp::matrix::KeyValue, tsp::accessor::Symmetric> graph(region);
+	auto now = std::chrono::system_clock::now();
+	std::cout << "Doing Nearest Neighbour:" << std::endl;
+	auto path1 = tsp::algorithm::NearestNeighbour(graph);
+	auto then = std::chrono::system_clock::now();
+	auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(then - now).count();
+	std::cout << "Nearest Neighbour complete (took " << diff << "ms):" << std::endl;
 
-	auto view = graph.get_neighbours(1);
-
-	for (auto node : graph.get_neighbours(1))
+	for (auto edge : path1)
 	{
-		std::cout << node.get_weight(graph) << std::endl;
+		std::cout << "	" << edge.first.start_node << " -> " << edge.first.end_node << " (" << edge.second << ")" << std::endl;
 	}
 
-	for (auto node : graph.get_nodes())
+	std::cout << "		Total weight: " << path1.total_weight() << std::endl;
+
+	now = std::chrono::system_clock::now();
+	std::cout << "Doing Branch And Bound:" << std::endl;
+	auto path0 = tsp::algorithm::BranchAndBound(graph);
+	then = std::chrono::system_clock::now();
+	diff = std::chrono::duration_cast<std::chrono::milliseconds>(then - now).count();
+	std::cout << "Branch And Bound complete (took " << diff << "ms):" << std::endl;
+
+	for (auto edge : path0)
 	{
-		std::cout << node << std::endl;
-	}
-	
-	auto path = tsp::algorithm::NearestNeighbour(graph);
-	for (auto edge : path)
-	{
-		std::cout << edge.first.start_node << " -> " << edge.first.end_node << " (" << edge.second << ")" << std::endl;
+		std::cout << "	" <<edge.first.start_node << " -> " << edge.first.end_node << " (" << edge.second << ")" << std::endl;
 	}
 
-	std::cout << path.total_weight() << std::endl;
+	std::cout << "		Total weight: " << path0.total_weight() << std::endl;
+
 	std::cout << "fk you!";
 	
 }
