@@ -307,7 +307,7 @@ namespace tsp
 		auto begin0 = region.begin();
 		auto begin1 = region.begin();
 		auto end = region.end();
-		
+		int size = std::distance(region.begin(), region.end());
 		if (begin0 == end)
 			return;
 
@@ -315,9 +315,9 @@ namespace tsp
 		{
 			for(begin1 = begin0 + 1;begin1 != end;++begin1)
 			{
-				add_weight(std::distance(begin0, end), std::distance(begin1, end), region.distance(*begin0, *begin1));
+				add_weight(size - std::distance(begin0, end), size - std::distance(begin1, end), region.distance(*begin0, *begin1));
 				if (!is_symmetric())
-					add_weight(std::distance(begin1, end), std::distance(begin0, end), region.distance(*begin0, *begin1));
+					add_weight(size - std::distance(begin1, end), size - std::distance(begin0, end), region.distance(*begin0, *begin1));
 			}
 		}
 	}
@@ -332,7 +332,7 @@ namespace tsp
 			virtual ~Symmetric() {};
 			bool is_symmetric() {return true;};
 			void add_weight(int n0, int n1, const T& weight);
-			int get_weight(int n0, int n1) const; 
+			T get_weight(int n0, int n1) const; 
 		};
 
 		template <class T, template <class> class MatrixType>
@@ -343,7 +343,7 @@ namespace tsp
 			bool is_symmetric() {return false;};
 			virtual ~Asymmetric() {};
 			void add_weight(int n0, int n1, const T& weight);
-			int get_weight(int n0, int n1) const; 
+			T get_weight(int n0, int n1) const; 
 		};
 
 
@@ -356,7 +356,7 @@ namespace tsp
 		}
 
 		template <class T, template <class> class MatrixType>
-		int Symmetric<T, MatrixType>::get_weight(int n0, int n1) const
+		T Symmetric<T, MatrixType>::get_weight(int n0, int n1) const
 		{
 			return get(std::min(n0, n1), std::max(n0, n1));
 		}
@@ -368,7 +368,7 @@ namespace tsp
 		}
 
 		template <class T, template <class> class MatrixType>
-		int Asymmetric<T, MatrixType>::get_weight(int n0, int n1) const
+		T Asymmetric<T, MatrixType>::get_weight(int n0, int n1) const
 		{
 			return get(n0, n1);
 		}

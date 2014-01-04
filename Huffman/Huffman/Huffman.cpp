@@ -1,7 +1,6 @@
 #include "Huffman.h"
 #include <queue>
-#include <map>
-#include <sstream>
+#include <array>
 
 Huffman::Huffman(std::string str)
 {
@@ -13,14 +12,16 @@ const Tree* const Huffman::getTree() const
 	return m_Tree.get();
 }
 
+/*
 const std::vector<bool>& Huffman::getCompressed() const
 {
 	return m_Compressed;
 }
-
+*/
 void Huffman::encode(std::string& str)
 {
-	std::map<char, int> charCount;
+	std::array<int, 256U> charCount;
+	std::fill(charCount.begin(), charCount.end(), 0);
 	m_Tree.reset();
 
 	struct priocomp
@@ -38,9 +39,11 @@ void Huffman::encode(std::string& str)
 		charCount[chr]++;
 	}
 
-	for (auto chr: charCount)
+	for (auto count = charCount.begin(); count != charCount.end(); ++count)
 	{
-		treeQ.emplace(chr.second, new Tree(chr.second, chr.first));
+		char chr = std::distance(charCount.begin(), count);
+		if (*count != 0)
+			treeQ.emplace(*count, new Tree(*count, chr));
 	}
 
 	while (!treeQ.empty())
@@ -62,16 +65,16 @@ void Huffman::encode(std::string& str)
 	}
 
 
-	auto encoding = m_Tree->getEncodings();
+	/*auto encoding = m_Tree->getEncodings();
 	m_Compressed.clear();
 	
 	for (auto chr: str)
 	{
 		m_Compressed.insert(m_Compressed.end(), encoding[chr].begin(), encoding[chr].end());	
-	}
+	}*/
 
 }
-
+/*
 std::string Huffman::deCompress()
 {
 	Tree* current = m_Tree.get(); 
@@ -198,4 +201,4 @@ void Huffman::deserialize(std::string& str)
 		}
 		m_Compressed.resize(size);
 	}
-}
+}*/

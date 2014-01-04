@@ -1,5 +1,4 @@
 #include "Tree.h"
-#include <iostream>
 
 Tree::Tree(int weight, char c)
 	:m_Weight(weight)

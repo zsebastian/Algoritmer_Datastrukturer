@@ -1,7 +1,9 @@
 #pragma once
 #include "Graph.h"
+#include "Path.h"
 #include "Edge.h"
 #include <vector>
+#include <set>
 #include <numeric>
 
 /*
@@ -34,26 +36,81 @@ namespace tsp
 {
 	namespace algorithm
 	{
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		void NearestNeighbour(const Graph<T, MatrixRep, AccessorPolicy>& graph)
+		namespace detail
 		{
-
-			auto node_view = graph.get_nodes();
-			/*std::vector<int> nodes;
-			for (auto node : node_view)
+			template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+			Path<T> NearestNeighbourOf(const Graph<T, MatrixRep, AccessorPolicy>& graph, int index)
 			{
-				nodes.push_back(node);
-			}*/
-			std::vector<int> nodes(node_view.begin(), node_view.end());
-			/*auto neighbours = graph.get_neighbours(nodes.front());
+				Path<T> p;
+				auto node_view = graph.get_nodes();
+			
+				std::set<int> unvisited;
+				int start_node = index;
 
+				for (auto node : node_view)
+				{
+					unvisited.insert(node);
+				}
+			
+				if(unvisited.empty() || start_node == -1)
+					return p;
+
+				int current_node = start_node;
+
+				int next_node;
+				unvisited.erase(current_node); 
+				while(!unvisited.empty())
+				{
+					T min_weight = std::numeric_limits<T>::max();
+					tsp::Edge current_edge(current_node, 0); 
+					auto neighbours = graph.get_neighbours(current_node);
+					for(auto node : neighbours)
+					{
+						if(unvisited.count(node.end_node) == 0)
+						{
+							continue;
+						}					
+						T w = graph.get_weight(current_node, node.end_node);
+						if(graph.get_weight(current_node, node.end_node) < min_weight)
+						{
+							min_weight = graph.get_weight(current_node, node.end_node);
+							next_node = node.end_node;
+						}
+					}
+					current_node = next_node;
+					current_edge.end_node = current_node; 
+					p.push(current_edge, graph);
+					unvisited.erase(current_node); 
+				}
+				p.push(Edge(p.back().first.end_node, p.front().first.start_node), graph);
+				return p;
+			}
+		}
+
+		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+		Path<T> NearestNeighbour(const Graph<T, MatrixRep, AccessorPolicy>& graph)
+		{
+			//SmallGraphi graph;
+			auto node_view = graph.get_nodes();
+			std::vector<int> nodes(node_view.begin(), node_view.end());
+			
+			T min_weight = std::numeric_limits<T>::max();
+			int current_node = nodes.front();
+			int next_node; 
+			auto neighbours = graph.get_neighbours(current_node);
+			
 			while(!nodes.empty())
 			{
-				for(auto node : neighbours)
+				Path<T> path = detail::NearestNeighbourOf(graph, node);
+				if (path.begin() != path.end() && path.total_weight() < min_weight)
 				{
-					
+					min_weight = path.total_weight();
+					ret = path;
 				}
-			}*/
+				current_node = next_node;
+				nodes.erase(nodes.begin(), nodes.end(), next_node);
+			}
+			return ret;
 		}
 	}
 }
