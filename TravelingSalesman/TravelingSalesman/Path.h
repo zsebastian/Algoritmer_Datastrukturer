@@ -15,8 +15,14 @@ namespace tsp
 		template <template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
 		bool push(Edge edge, const Graph<T, MatrixRep, AccessorPolicy>& from_graph);
 
+		const std::pair<Edge, T>& front() const;
+		const std::pair<Edge, T>& back() const;
+
+		std::pair<Edge, T>& front();
+		std::pair<Edge, T>& back();
+
 		int total_edges() const;
-		int total_weight() const;
+		T total_weight() const;
 
 		typename std::vector<std::pair<Edge, T>>::const_iterator begin() const;
 		typename std::vector<std::pair<Edge, T>>::const_iterator end() const;
@@ -45,12 +51,42 @@ namespace tsp
 	}
 
 	template <class T>
-	int Path<T>::total_weight() const
+	T Path<T>::total_weight() const
 	{
-		return std::accumulate(m_path.begin(), m_path.end(), 0, [&](T val, std::pair<Edge, T> e)
+		return std::accumulate(m_path.begin(), m_path.end(), 0.f, [&](T val, std::pair<Edge, T> e)
 			{
 				return val + e.second;
 			});
+	}
+
+	template <class T>
+	const std::pair<Edge, T>& Path<T>::front() const
+	{
+		return m_path.front();
+	}
+
+	template <class T>
+	const std::pair<Edge, T>& Path<T>::back() const
+	{
+		return m_path.back();
+	}
+
+	template <class T>
+	std::pair<Edge, T>& Path<T>::front()
+	{
+		return m_path.front();
+	}
+
+	template <class T>
+	std::pair<Edge, T>& Path<T>::back()
+	{
+		return m_path.back();
+	}
+
+	template <class T>
+	typename std::vector<std::pair<Edge, T>>::const_iterator Path<T>::end() const
+	{
+		return m_path.end();
 	}
 
 	template <class T>
@@ -59,9 +95,4 @@ namespace tsp
 		return m_path.begin();
 	}
 
-	template <class T>
-	typename std::vector<std::pair<Edge, T>>::const_iterator Path<T>::end() const
-	{
-		return m_path.end();
-	}
 }

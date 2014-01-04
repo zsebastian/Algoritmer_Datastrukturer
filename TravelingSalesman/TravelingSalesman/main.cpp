@@ -1,39 +1,65 @@
 #include "Array2d.h"
+#include "KeyValue.h"
+
 #include "Graph.h"
 #include "Tests.h"
 #include <iostream>
 #include <algorithm>
 #include "Path.h"
 #include "Edge.h"
+#include "BranchAndBound.h"
+#include "NearestNeighbour.h"
+#include "Region.h"
+#include "NearestNeighbour.h"
+#include <chrono>
 
 int main()
 {
-	tsp::tests::run();
-	tsp::SmallGraphi graph;
-
-	graph.add_weight(1, 0, 10);
-	graph.add_weight(3, 1, 20);
-
-
-	auto view = graph.get_neighbours(1);
-
-	for (auto node : graph.get_neighbours(1))
-	{
-		std::cout << graph.get_weight(node.start_node, node.end_node) << std::endl;
-	}
-
-	for (auto node : graph.get_nodes())
-	{
-		std::cout << node << std::endl;
-	}
-
-	tsp::Path<int> path;
-
 	
-	path.push(tsp::Edge(0, 1), graph);
-	path.push(tsp::Edge(1, 3), graph);
+	tsp::tests::run();
+	tsp::Region<float> region;
+	
+	region.add_city(15, 30);	
+	region.add_city(43, 18);
+	region.add_city(95, 80);
+	region.add_city(15, 65);
+	region.add_city(0, 60);
+	region.add_city(47, 55);
+	region.add_city(32, 27);
+	
+	/*region.add_city(32, 27);
+	region.add_city(15, 30);*/
+	
+	tsp::Graph<float, tsp::matrix::KeyValue, tsp::accessor::Symmetric> graph(region);
+	
+	auto now = std::chrono::system_clock::now();
+	std::cout << "Doing Nearest Neighbour:" << std::endl;
+	auto path1 = tsp::algorithm::NearestNeighbour(graph);
+	auto then = std::chrono::system_clock::now();
+	auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(then - now).count();
+	std::cout << "Nearest Neighbour complete (took " << diff << "ms):" << std::endl;
 
-	std::cout << path.total_weight() << std::endl;
+	for (auto edge : path1)
+	{
+		std::cout << "	" << edge.first.start_node << " -> " << edge.first.end_node << " (" << edge.second << ")" << std::endl;
+	}
+
+	std::cout << "		Total weight: " << path1.total_weight() << std::endl;
+
+	now = std::chrono::system_clock::now();
+	std::cout << "Doing Branch And Bound:" << std::endl;
+	auto path0 = tsp::algorithm::BranchAndBound(graph);
+	then = std::chrono::system_clock::now();
+	diff = std::chrono::duration_cast<std::chrono::milliseconds>(then - now).count();
+	std::cout << "Branch And Bound complete (took " << diff << "ms):" << std::endl;
+
+	for (auto edge : path0)
+	{
+		std::cout << "	" <<edge.first.start_node << " -> " << edge.first.end_node << " (" << edge.second << ")" << std::endl;
+	}
+
+	std::cout << "		Total weight: " << path0.total_weight() << std::endl;
+
 	std::cout << "fk you!";
 	
 }

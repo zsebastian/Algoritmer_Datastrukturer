@@ -83,7 +83,6 @@ namespace tsp
 			{
 				reserve(std::max(x + 1, m_size_x), std::max(m_size_y, y + 1));
 			}
-
 			m_vector[get_index(x, y)] = std::make_pair(true, std::move(weight));
 		}
 

@@ -1,0 +1,41 @@
+Att göra - Algoritmer & Datastrukturer
+
+Pseudokod:
+	- Handelsresandeproblemet, fixa
+	
+Tidskomplexitet: 
+	- Handelsresandeproblemet
+	- 
+Analys
+	- Handelsresandeproblemet
+
+
+LISTA FRÅGOR:
+	Hur analysera tidskomplexitet. Sociala nätverk 
+
+
+
+Att göra - update (2013-12-16)
+
+	Förfina inledningen
+	Tidskomplexitet för Bucketsort
+	Tidskomplexitet för huffman
+	Analys för huffman? 
+	
+	Intuitiv beskrivning för tidskomplexitet
+	tidskomplexiteten för tidkomplexitet
+	Analys för tidskomplexitet
+
+	Tidskomplexiteten för Nearest Neighbour
+	Analys för Nearest Neighbour
+
+	
+	LÄS IGENOM UPPGIFTSBESKRIVNINGEN OCH SE TILL ATT ALLA PUNKTER ÄR MED!!!!
+
+	
+	
+	
+	
+	
+	
+	

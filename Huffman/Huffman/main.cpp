@@ -1,16 +1,16 @@
 #include "Huffman.h"
 #include <iostream>
-#
+
 std::string Auguries_of_innocence();
 
 int main()
 {
 	std::string poem = Auguries_of_innocence();
-	Huffman huff("aaaabbbc");
+	Huffman huff(poem);
 	
 	auto tree = huff.getTree();
 	tree->printTree();
-	auto comp = huff.getCompressed();
+	/*auto comp = huff.getCompressed();
 	int i = 0;
 	for (auto bit : comp)
 	{
@@ -25,7 +25,7 @@ int main()
 	huff.deserialize(saved);
 
 	std::cout << std::endl <<  huff.deCompress();
-	return 0;
+	return 0;*/
 }
 
 std::string Auguries_of_innocence()

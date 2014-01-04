@@ -2,6 +2,8 @@
 #include <utility>
 #include <memory>
 #include "Edge.h"
+#include "Region.h"
+
 /*	MatrixRep concept:
 		Must have a virtual destructor!
 		Require these:
@@ -111,17 +113,22 @@ namespace tsp
 		};
 
 	public:
+		Graph() {};
+
+		Graph(const Region<T>& region);
+
 		NeighbourView get_neighbours(int node) const;
 		NodeView get_nodes() const;
 
 		using AccessorPolicy<T, MatrixRep>::add_weight;
 		using AccessorPolicy<T, MatrixRep>::get_weight;
 		T get_weight(Edge edge) const;
+		typedef T type;
 	};
 	/*	
 	NODEVIEW
 	*/
-			template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
 		Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::Iterator(int node, typename const Graph<T, MatrixRep, AccessorPolicy>& graph)
 			:m_node(node)
 			,m_graph(graph)
@@ -274,7 +281,7 @@ namespace tsp
 	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
 	typename Edge Graph<T, MatrixRep, AccessorPolicy>::NeighbourView::Iterator::operator*() const
 	{
-		return Edge(m_index, m_node);
+		return Edge(m_node, m_index);
 	}
 
 	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
@@ -301,6 +308,27 @@ namespace tsp
 		return get_weight(edge.start_node, edge.end_node);
 	}
 
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	Graph<T, MatrixRep, AccessorPolicy>::Graph(const Region<T>& region)
+	{
+		auto begin0 = region.begin();
+		auto begin1 = region.begin();
+		auto end = region.end();
+		int size = std::distance(region.begin(), region.end());
+		if (begin0 == end)
+			return;
+
+		for(;begin0 + 1 != end;++begin0)
+		{
+			for(begin1 = begin0 + 1;begin1 != end;++begin1)
+			{
+				add_weight(size - std::distance(begin0, end), size - std::distance(begin1, end), region.distance(*begin0, *begin1));
+				if (!is_symmetric())
+					add_weight(size - std::distance(begin1, end), size - std::distance(begin0, end), region.distance(*begin0, *begin1));
+			}
+		}
+	}
+
 	namespace accessor
 	{
 		template <class T, template <class> class MatrixType>
@@ -309,8 +337,9 @@ namespace tsp
 		{
 		public:
 			virtual ~Symmetric() {};
+			bool is_symmetric() {return true;};
 			void add_weight(int n0, int n1, const T& weight);
-			int get_weight(int n0, int n1) const; 
+			T get_weight(int n0, int n1) const; 
 		};
 
 		template <class T, template <class> class MatrixType>
@@ -318,9 +347,10 @@ namespace tsp
 			protected MatrixType<T>
 		{
 		public:
+			bool is_symmetric() {return false;};
 			virtual ~Asymmetric() {};
 			void add_weight(int n0, int n1, const T& weight);
-			int get_weight(int n0, int n1) const; 
+			T get_weight(int n0, int n1) const; 
 		};
 
 
@@ -333,7 +363,7 @@ namespace tsp
 		}
 
 		template <class T, template <class> class MatrixType>
-		int Symmetric<T, MatrixType>::get_weight(int n0, int n1) const
+		T Symmetric<T, MatrixType>::get_weight(int n0, int n1) const
 		{
 			return get(std::min(n0, n1), std::max(n0, n1));
 		}
@@ -345,7 +375,7 @@ namespace tsp
 		}
 
 		template <class T, template <class> class MatrixType>
-		int Asymmetric<T, MatrixType>::get_weight(int n0, int n1) const
+		T Asymmetric<T, MatrixType>::get_weight(int n0, int n1) const
 		{
 			return get(n0, n1);
 		}

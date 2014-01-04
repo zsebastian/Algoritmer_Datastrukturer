@@ -16,8 +16,7 @@ namespace relations
 
 	node::node(std::string name, detail::this_is_private&)
 		:name_(std::move(name))
-	{
-	}
+	{}
 
 	std::vector<node::ptr_t> node::list_friends()
 	{
@@ -27,6 +26,7 @@ namespace relations
 		std::set<node::ptr_t> visited; 
 
 		current_level.push_back(shared_from_this());
+		visited.insert(shared_from_this());
 		bool enemy_is_friend = false;
 
 		while(!current_level.empty())
@@ -35,19 +35,16 @@ namespace relations
 			{
 				for(auto& enemy : node->enemies_)
 				{
-					if(enemy_is_friend
-						&& std::find(friends.begin(), friends.end(),
-							enemy) == friends.end())
+					if (visited.count(enemy) == 0)
 					{
-						friends.push_back(enemy);
-					}
-					if(visited.count(enemy) == 0)
-					{
+						if(enemy_is_friend)
+						{
+							friends.push_back(enemy);
+						}
 						visited.insert(enemy);
 						next_level.push_back(enemy);
 					}
 				}
-
 			}
 			enemy_is_friend = !enemy_is_friend;
 			current_level = std::move(next_level);
