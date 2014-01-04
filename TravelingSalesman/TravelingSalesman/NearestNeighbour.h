@@ -37,17 +37,27 @@ namespace tsp
 		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
 		void NearestNeighbour(const Graph<T, MatrixRep, AccessorPolicy>& graph)
 		{
-			SmallGraphi graph;
+			//SmallGraphi graph;
 			auto node_view = graph.get_nodes();
 			std::vector<int> nodes(node_view.begin(), node_view.end());
-			auto neighbours = graph.get_neighbours(nodes.front());
-
+			
+			T min_weight = std::numeric_limits<T>::max();
+			int current_node = nodes.front();
+			int next_node; 
+			auto neighbours = graph.get_neighbours(current_node);
+			
 			while(!nodes.empty())
 			{
 				for(auto node : neighbours)
 				{
-					
+					if(graph.get_weight(/* start_node ? */, /* node (dock är detta en edge)? */) < min_weight);
+					{
+						next_node = node; // behöver rätt nod och inte edge
+						min_weight = graph.get_weight(/* start_node ? */, /* node (dock är detta en edge)? */
+					}
 				}
+				current_node = next_node;
+				nodes.erase(nodes.begin(), nodes.end(), next_node);
 			}
 		}
 	}
