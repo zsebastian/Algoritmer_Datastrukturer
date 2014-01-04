@@ -67,7 +67,6 @@ namespace tsp
 				bool operator!=(const Iterator& rhs) const;
 				Iterator operator++();
 				Edge operator*() const;
-				int starting_node() const;
 			private:
 				void next();
 
@@ -128,87 +127,87 @@ namespace tsp
 	/*	
 	NODEVIEW
 	*/
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::Iterator(int node, typename const Graph<T, MatrixRep, AccessorPolicy>& graph)
-			:m_node(node)
-			,m_graph(graph)
-		{
-			next();
-		}
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::Iterator(int node, typename const Graph<T, MatrixRep, AccessorPolicy>& graph)
+		:m_node(node)
+		,m_graph(graph)
+	{
+		next();
+	}
 
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		typename Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator Graph<T, MatrixRep, AccessorPolicy>::NodeView::begin()
-		{
-			return Iterator(0, m_graph);
-		}
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator Graph<T, MatrixRep, AccessorPolicy>::NodeView::begin()
+	{
+		return Iterator(0, m_graph);
+	}
 	
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		typename Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator Graph<T, MatrixRep, AccessorPolicy>::NodeView::end()
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator Graph<T, MatrixRep, AccessorPolicy>::NodeView::end()
+	{
+		//using std::max does not make sense now that we have AccessorPolicy, which should control this
+		return Iterator(std::max(m_graph.size_x(), m_graph.size_y()), m_graph);
+	}
+
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	bool Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::operator!=(const Iterator& rhs) const
+	{
+		return m_node != rhs.m_node;
+	}
+
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	void Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::next()
+	{
+		//using std::max does not make sense now that we have AccessorPolicy, which should control this
+		int size = std::max(m_graph.size_x(), m_graph.size_y());
+		if (m_node >= size)
 		{
-			//using std::max does not make sense now that we have AccessorPolicy, which should control this
-			return Iterator(std::max(m_graph.size_x(), m_graph.size_y()), m_graph);
+			m_node = size;
+			return;
 		}
 
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		bool Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::operator!=(const Iterator& rhs) const
+		bool found_next = false;
+		while (!found_next)
 		{
-			return m_node != rhs.m_node;
-		}
-
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		void Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::next()
-		{
-			//using std::max does not make sense now that we have AccessorPolicy, which should control this
-			int size = std::max(m_graph.size_x(), m_graph.size_y());
-			if (m_node >= size)
+			for (int i = 0; i < std::max(m_graph.size_x(), m_graph.size_y()); ++i)
 			{
-				m_node = size;
-				return;
-			}
-
-			bool found_next = false;
-			while (!found_next)
-			{
-				for (int i = 0; i < std::max(m_graph.size_x(), m_graph.size_y()); ++i)
+				if(m_graph.is_null(std::min(m_node, i), std::max(m_node, i)))
 				{
-					if(m_graph.is_null(std::min(m_node, i), std::max(m_node, i)))
+					if (m_node >= size)
 					{
-						if (m_node >= size)
-						{
-							m_node = size;
-							found_next = true;
-							break;
-						}
-					}
-					else
-					{
+						m_node = size;
 						found_next = true;
 						break;
 					}
 				}
-				if (!found_next)
-					++m_node;
+				else
+				{
+					found_next = true;
+					break;
+				}
 			}
+			if (!found_next)
+				++m_node;
 		}
+	}
 
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		typename Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::operator++()
-		{
-			++m_node;
-			next();
-			return *this;
-		}
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::operator++()
+	{
+		++m_node;
+		next();
+		return *this;
+	}
 
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		typename int Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::operator*() const
-		{
-			return m_node;
-		}
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	typename int Graph<T, MatrixRep, AccessorPolicy>::NodeView::Iterator::operator*() const
+	{
+		return m_node;
+	}
 
-		template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-		Graph<T, MatrixRep, AccessorPolicy>::NodeView::NodeView(const Graph<T, MatrixRep, AccessorPolicy>& graph)
-			:m_graph(graph)
-		{}
+	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
+	Graph<T, MatrixRep, AccessorPolicy>::NodeView::NodeView(const Graph<T, MatrixRep, AccessorPolicy>& graph)
+		:m_graph(graph)
+	{}
 	
 	/*
 		NEIGHBOURVIEW
@@ -262,12 +261,6 @@ namespace tsp
 				break;
 			}
 		}
-	}
-
-	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
-	int Graph<T, MatrixRep, AccessorPolicy>::NeighbourView::Iterator::starting_node() const
-	{
-		return m_node;
 	}
 
 	template <class T, template <class> class MatrixRep, template <class, template <class> class > class AccessorPolicy>
